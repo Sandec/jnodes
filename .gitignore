@@ -1,0 +1,16 @@
+/bin
+target/
+build/
+.gradle/
+*.class
+.classpath
+.project
+.settings/
+project/target/*
+/.cache
+.idea/
+*.iml
+benchmarks/*
+quizmax/src/android/AndroidManifest.xml
+shared/src/main/resources/quizmax.version
+shared/src/main/resources/application.conf

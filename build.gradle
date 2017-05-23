@@ -1,0 +1,86 @@
+System.setProperty("file.encoding", "UTF-8")
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "${System.properties['user.home']}/.m2/repository/"
+        }
+
+        maven {
+            url "http://sandec.bintray.com/repo"
+        }
+
+        maven {
+            url "http://mix-software.com:8081/nexus/content/repositories/jpro-snapshots"
+        }
+
+        maven {
+            url "http://mix-software.com:8081/nexus/content/repositories/jpro"
+        }
+    }
+
+    dependencies {
+        classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven {
+            url "${System.properties['user.home']}/.m2/repository/"
+        }
+
+        maven {
+            url "http://sandec.bintray.com/repo"
+        }
+
+        maven {
+            url "http://mix-software.com:8081/nexus/content/repositories/jpro-snapshots"
+        }
+
+        maven {
+            url "http://mix-software.com:8081/nexus/content/repositories/jpro"
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'de.sandec.simplefx'
+
+    group = 'SANDEC'
+    version = "$simplefx_util_version"
+
+    dependencies {
+        testCompile "junit:junit:4.12"
+    }
+}
+
+configure([rootProject]) {
+
+    apply plugin: 'java'
+    apply plugin: 'de.sandec.simplefx'
+    apply plugin: 'maven-publish'
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+    }
+
+    test {
+        jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless']
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                groupId project.group
+                artifactId "simplefx-util"
+                version project.version
+            }
+        }
+    }
+
+
+}
