@@ -22,6 +22,7 @@ buildscript {
 
     dependencies {
         classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -62,6 +63,7 @@ configure([rootProject]) {
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
     apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     dependencies {
         testCompile 'junit:junit:4.12'
@@ -76,11 +78,25 @@ configure([rootProject]) {
             mavenJava(MavenPublication) {
                 from components.java
                 groupId project.group
-                artifactId "simplefx-util"
+                artifactId project.name
                 version project.version
             }
         }
     }
 
+    bintray {
+        if(project.hasProperty("BINTRAY_USER")) {
+            user = BINTRAY_USER
+            key  = BINTRAY_KEY
+        }
+        publications = ['mavenJava']
+        publish = true
+        override = true
+        pkg {
+            repo = 'repo'
+            name = project.name
+            userOrg = 'sandec'
+        }
+    }
 
 }
