@@ -1,0 +1,20 @@
+
+.carousel {
+  -fx-background-color: green;
+}
+
+.carousel-left, .carousel-right {
+
+  -fx-max-width: 100px;
+  -fx-max-height: 100px;
+  /*-fx-background-color: yellow;*/
+  -fx-background-size: 100% 100%;
+}
+
+.carousel-left {
+  -fx-background-image: url('slider_back.png');
+}
+
+.carousel-right {
+  -fx-background-image: url('slider_next.png');
+}

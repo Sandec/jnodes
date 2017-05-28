@@ -58,6 +58,20 @@ allprojects {
     }
 }
 
+configure([project(':example')]) {
+    dependencies {
+        compile rootProject
+
+        // shouldn't be required, have to investigate!
+        compile group: 'org.scala-lang', name: 'scala-reflect', version: '2.11.11'
+        compile "org.scala-lang:scala-reflect:2.11.11"
+    }
+    //apply plugin: 'java'
+    //apply plugin: 'de.sandec.simplefx'
+    apply plugin: 'application'
+    mainClassName = 'jnodes.example.TestCarousel'
+}
+
 configure([rootProject]) {
 
     apply plugin: 'java'
