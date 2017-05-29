@@ -9,6 +9,7 @@ object TestCarousel extends App
 @SimpleFXApp class TestCarousel { THIS =>
 
   root = new VBox {
+    prefWH = (500,500)
     fillWidth = true
     this <++ new Carousel {
       prefWH = (300,300)
@@ -17,8 +18,10 @@ object TestCarousel extends App
       content <++ new Label("element c")
     }
     this <++ new Carousel {
-      prefWH = (300,300)
-      content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/1.png"))
+      maxWH = (300,300)
+      content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/1.png")) {
+        maxWH = (100,100)
+      }
       content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/2.png"))
       content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/3.png"))
       content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/4.png"))

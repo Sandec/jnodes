@@ -1,13 +1,11 @@
 
 .carousel {
-  -fx-background-color: green;
 }
 
 .carousel-left, .carousel-right {
 
   -fx-max-width: 100px;
   -fx-max-height: 100px;
-  /*-fx-background-color: yellow;*/
   -fx-background-size: 100% 100%;
 }
 

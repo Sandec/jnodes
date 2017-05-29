@@ -47,6 +47,10 @@ class Carousel extends StackPane { THIS =>
     }
   }
 
+  this.clip = new Rectangle {
+    this.wh <-- THIS.wh
+  }
+
   this <++ rightButton
   this <++ leftButton
 }
