@@ -51,7 +51,7 @@ allprojects {
     apply plugin: 'de.sandec.simplefx'
 
     group = 'SANDEC'
-    version = "$simplefx_util_version"
+    version = "$jnodesVersion"
 
     dependencies {
         testCompile "junit:junit:4.12"
