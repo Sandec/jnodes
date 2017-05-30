@@ -69,9 +69,11 @@ object Device {
   }
   case class Device(val image: Image, val imageWH: Double2, val contentXY: Double2, val contentWH: Double2, val factor: Double) extends Mode
 
-  lazy val iphone = Device(Image.cached("de/sandec/jnodes/devices/iphone.png"), (768,1491), ( 66, 267), (646, 962), 0.53)
+  lazy val iphone = Device(Image.cached("de/sandec/jnodes/devices/iphone.png"), (768,1491), ( 66, 267), (646, 962), 0.51)
   lazy val samsung_tablet = Device(Image.cached("de/sandec/jnodes/devices/samsungtab.png"), (443.0,758.0) + (100,0), ( 54,30), (443.0,708.0), 1.0)
-  lazy val imac_monitor = Device(Image.cached("de/sandec/jnodes/devices/imac.png"),(1122.0 , 904.0),(47,42),(1030,588), 1.0)
+  lazy val ipad = Device(Image.cached("de/sandec/jnodes/devices/ipad.png"), (1000.0,1385.0), ( 54,97), (895.0,1192.0), 0.55)
+  lazy val samsung_galaxy = Device(Image.cached("de/sandec/jnodes/devices/galaxyS7.png"), (496.0,1000.0), ( 273,150), (452.0,770.0), 0.5)
+  lazy val imac_monitor = Device(Image.cached("de/sandec/jnodes/devices/imac.png"),(1122.0 , 904.0),(47,42),(1030,588), 0.83)
 
   //lazy val nophone = Device(null, (768,1491), ( 66, 267), (646, 962))
 

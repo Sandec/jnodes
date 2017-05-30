@@ -3,6 +3,7 @@ package de.sandec.jnodes.elements
 import simplefx.core._
 import simplefx.all._
 
+class ResizableGroup extends Group with Resizable
 trait Resizable extends Node {
 
   override def isResizable() = true
