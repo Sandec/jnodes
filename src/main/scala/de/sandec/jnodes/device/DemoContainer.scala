@@ -48,7 +48,7 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
 
   imageLocation ==> { loc =>
     if(!loc.isEmpty){
-      PANE.style = "-fx-background-image: url('" + loc + "'); -fx-background-repeat: stretch; -fx-background-size: 100% 100%;"
+      PANE.style = "-fx-background-image: url('" + loc + "');-fx-background-size: cover;-fx-background-position: right top;"
     }
   }
 
