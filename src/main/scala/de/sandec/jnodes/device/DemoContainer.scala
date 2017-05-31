@@ -22,7 +22,9 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
   def createDevice(_content: Node, _mode: Device.Device, posXY: (Double, Double)) = new Device(_content){ NODE =>
     device = _mode
     @Bind var toggle: Boolean = false
-    prefHeightProp <-- (PANE.height * 0.25)
+
+    prefWidthProp   = if(_mode == Device.imac_monitor) 300.0 else 200.0
+    prefHeightProp  = 300.0
 
     val scaleMax: Double = 3.0
     val scaleMin: Double = 1.0
@@ -42,11 +44,15 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
       animation := 1.0 in (scaleIn) using Interpolator.EASE_OUT
       scaleXY :=  (scaleMax.to2D)   in (scaleIn) using Interpolator.EASE_OUT
     } otherwise {
+      NODE.toBack()
       scaleXY :=  (scaleMin.to2D)   in (scaleIn) using Interpolator.EASE_OUT
       animation := 0.0 in (scaleIn) using Interpolator.EASE_OUT
     }
 
-    this.onClick --> (toggle := !toggle)
+    this.onClick --> {
+      println("Node clicked " + this + " node: " + NODE + NODE.bipH)
+      toggle := !toggle
+    }
 
   }
 
