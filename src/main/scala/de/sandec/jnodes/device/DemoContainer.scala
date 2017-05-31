@@ -62,7 +62,7 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
 
   def createDevice(_content: Node, _mode: Device.Device, posXY: (Double, Double)) = new DemoWrapper(_content, _mode){ NODE =>
 
-    val scaleMax: Dbl = 3.0
+    val scaleMax: Dbl = 2.5
     val scaleMin: Dbl = 1.0
     val scaleIn: Time    = (0.2 s)
 
