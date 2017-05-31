@@ -42,7 +42,25 @@ class DemoWrapper(_content: Node, _mode: Device.Device) extends HBox(10){
 
 class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_content2: Node, portrait_content3: Node, portrait_content4: Node) extends Pane { PANE =>
 
-  @Bind var imageLocation = ""
+  @Bind var scalingTime            : Time   = (0.3 s)
+  @Bind var scalingFactor          : Double = (2.5)
+
+  @Bind var position_imac          : (Double, Double) = position(2,0)
+  @Bind var position_iphone        : (Double, Double) = position(0,0)
+  @Bind var position_ipad          : (Double, Double) = position(1,0)
+  @Bind var position_galaxyTab     : (Double, Double) = position(1,1)
+  @Bind var position_galaxyPhone   : (Double, Double) = position(0,1)
+
+  @Bind var imageLocation          : String = ""
+
+  def getPosition(mode: Device.Device): (Double, Double) = mode match{
+    case Device.imac_monitor   => position_imac
+    case Device.iphone         => position_iphone
+    case Device.ipad           => position_ipad
+    case Device.samsung_galaxy => position_galaxyPhone
+    case Device.samsung_tablet => position_galaxyTab
+    case other                 => (0.0,0.0)
+  }
 
   imageLocation ==> { loc =>
     if(!loc.isEmpty){
@@ -60,13 +78,10 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
 
   PANE <++ blurPane
 
-  def createDevice(_content: Node, _mode: Device.Device, posXY: (Double, Double)) = new DemoWrapper(_content, _mode){ NODE =>
-
-    val scaleMax: Dbl = 2.5
-    val scaleMin: Dbl = 1.0
-    val scaleIn: Time    = (0.2 s)
+  def createDevice(_content: Node, _mode: Device.Device) = new DemoWrapper(_content, _mode){ NODE =>
 
     @Bind var animation = 0.0
+    @Bind var posXY     = <-- (getPosition(_mode))
 
     def startPos      = (PANE.layoutXY + PANE.labWH * posXY)
     def fullscreenPos = ((PANE.labWH - NODE.labWH) /2)
@@ -78,14 +93,14 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
     when(toggle)  ==> {
       blurPane.style = "-fx-background-color: rgba(0,0,0,0.6);"
       blurPane.toFront()
-      animation := 1.0 in (scaleIn) using Interpolator.EASE_OUT
-      scaleXY :=  (scaleMax.to2D)   in (scaleIn) using Interpolator.EASE_OUT
+      animation := 1.0 in (scalingTime) using Interpolator.EASE_OUT
+      scaleXY :=  (scalingFactor.to2D)   in (scalingTime) using Interpolator.EASE_OUT
       NODE.toFront()
     } otherwise {
       blurPane.style = "-fx-background-color: transparent;"
       blurPane.toBack()
-      scaleXY :=  (scaleMin.to2D)   in (scaleIn) using Interpolator.EASE_OUT
-      animation := 0.0 in (scaleIn) using Interpolator.EASE_OUT
+      scaleXY :=  (1.0,1.0)   in (scalingTime) using Interpolator.EASE_OUT
+      animation := 0.0 in (scalingTime) using Interpolator.EASE_OUT
     }
 
     this.minmaxPane.onClick --> {
@@ -99,12 +114,12 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
 
   def position(row: Int, column: Int) = (startingPoint + (row.toDouble, column.toDouble) * offset)
 
-  @Bind var device2 : DemoWrapper = createDevice(portrait_content1, Device.iphone,         position(0,0))
-  @Bind var device3 : DemoWrapper = createDevice(portrait_content2, Device.ipad,           position(1,0))
-  @Bind var device4 : DemoWrapper = createDevice(portrait_content3, Device.samsung_galaxy, position(0,1))
-  @Bind var device5 : DemoWrapper = createDevice(portrait_content4, Device.samsung_tablet, position(1,1))
+  @Bind var device2 : DemoWrapper = createDevice(portrait_content1, Device.iphone        )
+  @Bind var device3 : DemoWrapper = createDevice(portrait_content2, Device.ipad          )
+  @Bind var device4 : DemoWrapper = createDevice(portrait_content3, Device.samsung_galaxy)
+  @Bind var device5 : DemoWrapper = createDevice(portrait_content4, Device.samsung_tablet)
 
-  @Bind var device1 : DemoWrapper = createDevice(landscape_content, Device.imac_monitor,   position(2,0))
+  @Bind var device1 : DemoWrapper = createDevice(landscape_content, Device.imac_monitor  )
 
   <++ (device1)
   <++ (device2)
