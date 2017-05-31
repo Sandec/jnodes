@@ -1,6 +1,6 @@
 package jnodes.example
 
-import de.sandec.jnodes.device.{DemoContainer, DeviceContainer}
+import de.sandec.jnodes.device.DemoContainer
 import simplefx.all._
 import simplefx.core._
 
