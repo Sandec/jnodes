@@ -69,7 +69,7 @@ configure([project(':example')]) {
     //apply plugin: 'java'
     //apply plugin: 'de.sandec.simplefx'
     apply plugin: 'application'
-    mainClassName = 'jnodes.example.TestCarousel'
+    mainClassName = 'jnodes.example.ScreenTest'
 }
 
 configure([rootProject]) {
