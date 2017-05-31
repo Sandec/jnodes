@@ -5,27 +5,12 @@ import simplefx.all._
 import simplefx.core._
 import simplefx.experimental._
 
-class DemoWrapper(_content: Node, _mode: Device.Device) extends HBox(10){
+class DemoWrapper(_content: Node, _mode: Device.Device) extends HBox(10){ BOX =>
 
   @Bind var toggle: Boolean = false
 
-  @Bind var imgURL: String = <-- (if(toggle) "de/sandec/jnodes/elements/general/zoom_out.png" else "de/sandec/jnodes/elements/general/zoom_in.png")
-
   val minSize: Double = 15.0
   val maxSize: Double = 30.0
-
-  val minmaxPane = new StackPane{
-    alignment = Pos.CENTER
-    <++ (new Circle{
-      style = "-fx-fill: linear-gradient(from 0% 0% to 0% 100%, #FFFFFF 0%, #c1c1c1 100%);"
-      radius <-- (if(toggle) minSize else maxSize)
-    })
-    <++ (new ImageView{
-      image <-- (Image.cached(imgURL))
-      fitWH <-- (if(toggle) minSize.to2D else maxSize.to2D)
-    })
-    scaleOnHover = (1.2, (0.2 s))
-  }
 
   val contentPane = new StackPane{
     alignment = Pos.CENTER
@@ -36,8 +21,7 @@ class DemoWrapper(_content: Node, _mode: Device.Device) extends HBox(10){
     })
   }
 
-  <++ (contentPane)
-  <++ (minmaxPane)
+  BOX <++ (contentPane)
 }
 
 class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_content2: Node, portrait_content3: Node, portrait_content4: Node) extends Pane { PANE =>
@@ -91,7 +75,7 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
     layoutXY <-- realPos
 
     when(toggle)  ==> {
-      blurPane.style = "-fx-background-color: rgba(0,0,0,0.6);"
+      blurPane.style = "-fx-background-color: rgba(0,0,0,0.4);"
       blurPane.toFront()
       animation := 1.0 in (scalingTime) using Interpolator.EASE_OUT
       scaleXY :=  (scalingFactor.to2D)   in (scalingTime) using Interpolator.EASE_OUT
@@ -103,8 +87,12 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
       animation := 0.0 in (scalingTime) using Interpolator.EASE_OUT
     }
 
-    this.minmaxPane.onClick --> {
-      toggle := !toggle
+    this.contentPane.onClick --> {
+      if(!toggle)toggle := true
+    }
+
+    blurPane.onClick --> {
+      if(toggle)toggle := false
     }
 
   }
