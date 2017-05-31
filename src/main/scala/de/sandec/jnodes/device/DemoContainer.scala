@@ -1,10 +1,19 @@
 package de.sandec.jnodes.device
 
+import de.sandec.jnodes.elements.AdaptiveImageHorizontal
 import simplefx.all._
 import simplefx.core._
 import simplefx.experimental._
 
 class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_content2: Node, portrait_content3: Node, portrait_content4: Node) extends Pane { PANE =>
+
+  @Bind var imageLocation = ""
+
+  imageLocation ==> { loc =>
+    if(!loc.isEmpty){
+      PANE.style = "-fx-background-image: url('" + loc + "'); -fx-background-repeat: stretch; -fx-background-size: 100% 100%;"
+    }
+  }
 
   this.padding = Insets(10)
 
@@ -49,7 +58,7 @@ class DemoContainer(landscape_content: Node, portrait_content1: Node, portrait_c
 
   @Bind var device2 : Device = createDevice(portrait_content1, Device.iphone,         position(0,0))
   @Bind var device3 : Device = createDevice(portrait_content2, Device.ipad,           position(1,0))
-  @Bind var device4 : Device = createDevice(portrait_content3, Device.iphone,         position(0,1))
+  @Bind var device4 : Device = createDevice(portrait_content3, Device.samsung_galaxy, position(0,1))
   @Bind var device5 : Device = createDevice(portrait_content4, Device.samsung_tablet, position(1,1))
 
   @Bind var device1 : Device = createDevice(landscape_content, Device.imac_monitor,   position(2,0))

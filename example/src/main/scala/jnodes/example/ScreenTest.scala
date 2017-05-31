@@ -9,6 +9,8 @@ object ScreenTest extends App
 class ScreenTest { PARENT =>
     title = "Some demo"
 
-    scene = new Scene(new DemoContainer, 1200, 600)
+    scene = new Scene(new DemoContainer(new StackPane, new StackPane, new StackPane, new StackPane, new StackPane){
+      @Bind override var imageLocation = "/test/image/flowers.jpg"
+    }, 1200, 600)
 
 }
