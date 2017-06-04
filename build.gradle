@@ -22,6 +22,7 @@ buildscript {
 
     dependencies {
         classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
+        classpath "com.jprotechnologies.jpro:jpro-plugin-gradle:$JPRO_PLUGIN_VERSION"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
@@ -69,7 +70,18 @@ configure([project(':example')]) {
     //apply plugin: 'java'
     //apply plugin: 'de.sandec.simplefx'
     apply plugin: 'application'
-    mainClassName = 'jnodes.example.ScreenTest'
+    apply plugin: 'com.jprotechnologies.jpro'
+
+    //mainClassName = 'jnodes.example.ScreenTest'
+    mainClassName = 'jnodes.example.TestCarousel'
+
+    jpro {
+        if (project.hasProperty('JPRO_LICENSE_USERNAME')) {
+            username     ="$JPRO_LICENSE_USERNAME"
+            password     ="$JPRO_LICENSE_PASSWORD"
+            licensenumber="$JPRO_LICENSE_LICENSENUMBER"
+        }
+    }
 }
 
 configure([rootProject]) {
