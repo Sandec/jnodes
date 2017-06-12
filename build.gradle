@@ -84,7 +84,7 @@ configure([project(':example')]) {
     }
 }
 
-configure([rootProject]) {
+configure([rootProject, project(':jnodes-devices')]) {
 
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
