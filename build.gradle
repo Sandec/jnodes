@@ -124,5 +124,16 @@ configure([rootProject, project(':jnodes-devices')]) {
             userOrg = 'sandec'
         }
     }
-
 }
+
+configure([project(':jnodes-devices')]) {
+    dependencies {
+        compile rootProject
+        testCompile 'junit:junit:4.12'
+    }
+}
+
+
+
+
+
