@@ -1,4 +1,5 @@
 rootProject.name = 'jnodes'
 
 include "jnodes-devices"
+include "jnodes-config"
 include "example"
