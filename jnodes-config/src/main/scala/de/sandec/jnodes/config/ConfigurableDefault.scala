@@ -221,7 +221,9 @@ class ConfigurableDefault {
 
   implicit val configurableColorPicker: Configurable[Color] = new Configurable[Color] {
     override def createNode(x: B[Color]): Node = {
-      var colorPicker = new ColorPicker(x.get)
+      var colorPicker = new ColorPicker {
+       value <-> x
+      }
       colorPicker
     }
   }
