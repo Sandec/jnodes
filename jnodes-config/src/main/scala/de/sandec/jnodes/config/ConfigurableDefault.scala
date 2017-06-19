@@ -113,6 +113,21 @@ class ConfigurableDefault {
     }
   }
 
+  val configureSingleLineString: Configurable[String] = new Configurable[String] {
+    override def createNode(x: B[String]): Node = {
+      new TextField {
+        text <-> x
+      }
+    }
+  }
+
+  val configureMultiLineString: Configurable[String] = new Configurable[String] {
+    override def createNode(x: B[String]): Node = {
+      new TextArea {
+        text <-> x
+      }
+    }
+  }
 
   implicit val configurableString: Configurable[String] = new Configurable[String] {
     override def createNode(x: B[String]): Node = {
