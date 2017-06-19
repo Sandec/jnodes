@@ -68,6 +68,7 @@ trait ConfigurableExtended extends ConfigurableDefault {
       }
       @Bind val addButton = new Button("add") {
         onAction --> {
+          if(content == null) content = Nil
           content ::= toAdd
           toAdd = getDefault[A]
         }
