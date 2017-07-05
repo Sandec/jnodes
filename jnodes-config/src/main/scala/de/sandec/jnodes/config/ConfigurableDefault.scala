@@ -10,6 +10,21 @@ import simplefx.all._
 object ConfigurableExtended extends ConfigurableExtended
 trait ConfigurableExtended extends ConfigurableDefault {
 
+  implicit def configureOption[A: Configurable] = new Configurable[Option[A]] {
+    def createNode(x: B[Option[A]]) = new HBox {
+      @Bind var hasValue: Boolean = <--(!x.isEmpty)
+      @Bind var value: A = null.asInstanceOf[A] <> {
+        value <--(x.getOrElse(value))
+      }
+      x <-- (if(hasValue) Some(value) else None)
+
+      this <++ config(hasValue)
+      val configA = config(value)
+      this <++ configA
+      configA.disable <-- !hasValue
+    }
+  }
+
   implicit def configureList[A: Configurable: DefaultValue] = new Configurable[List[A]] {
     def createNode(x: B[List[A]]) = new VBox {
       @Bind var content: List[A] = <*>(x)
@@ -124,6 +139,7 @@ class ConfigurableDefault {
   val configureMultiLineString: Configurable[String] = new Configurable[String] {
     override def createNode(x: B[String]): Node = {
       new TextArea {
+        //wrapText = false
         text <-> x
       }
     }

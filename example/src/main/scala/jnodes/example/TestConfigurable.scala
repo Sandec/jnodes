@@ -14,13 +14,14 @@ object TestConfigurable extends App
     maxWidthProp = 300
     @Bind var a = ""
     @Bind var b = 1
-    @Bind var c = (Color.BLUE,"")
-    @Bind var list: List[(Int,String)] = Nil
+    @Bind var c: Option[Color] = Some(Color.BLUE)
+    @Bind var list: List[(Int,String)] = null
     @Bind var list2: List[(List[Int],String)] = Nil
     this <++ config(a)
+    this <++ configureMultiLineString.createNode(a)
     this <++ config(b)
     this <++ config(c)
-    this <++ config(list2)
+    this <++ config(list)
   }
 
 }
