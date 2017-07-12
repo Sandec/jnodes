@@ -12,9 +12,9 @@ trait ConfigurableExtended extends ConfigurableDefault {
 
   implicit def configureOption[A: Configurable] = new Configurable[Option[A]] {
     def createNode(x: B[Option[A]]) = new HBox {
-      @Bind var hasValue: Boolean = <--(!x.isEmpty)
+      @Bind var hasValue: Boolean = <--((x.v ne null) && !x.isEmpty)
       @Bind var value: A = null.asInstanceOf[A] <> {
-        value <--(x.getOrElse(value))
+        value <--(if(x.v eq null) null.asInstanceOf[A] else x.getOrElse(value))
       }
       x <-- (if(hasValue) Some(value) else None)
 

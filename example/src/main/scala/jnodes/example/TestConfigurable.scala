@@ -14,7 +14,7 @@ object TestConfigurable extends App
     maxWidthProp = 300
     @Bind var a = ""
     @Bind var b = 1
-    @Bind var c: Option[Color] = Some(Color.BLUE)
+    @Bind var c: Option[Color] = null //Some(Color.BLUE)
     @Bind var list: List[(Int,String)] = null
     @Bind var list2: List[(List[Int],String)] = Nil
     this <++ config(a)
