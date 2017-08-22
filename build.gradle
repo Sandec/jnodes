@@ -86,7 +86,7 @@ configure([project(':example')]) {
     }
 }
 
-configure([rootProject, project(':jnodes-devices'), project(':jnodes-config')]) {
+configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,project(':jnodes-config')]) {
 
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
@@ -142,6 +142,13 @@ configure([project(':jnodes-config')]) {
     }
 }
 
+configure([project(':jnodes-lang')]) {
+    dependencies {
+        compile rootProject
+        compile "com.typesafe:config:1.3.1"
+        testCompile 'junit:junit:4.12'
+    }
+}
 
 
 
