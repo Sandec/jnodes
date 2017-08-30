@@ -9,10 +9,10 @@ object Util {
       PageContext.getContext(inject).children = List(page)
     }
     def showPopup(popup: Node) = {
-      PageContext.getContext(inject) <++ popup
+      PopupContext.getContext(inject) <++ popup
     }
     def closePopup(popup: Node) = {
-      PageContext.getContext(inject).children = PageContext.getContext(inject).children.filter(_ != popup)
+      PopupContext.getContext(inject).children = PopupContext.getContext(inject).children.filter(_ != popup)
     }
   }
 }
