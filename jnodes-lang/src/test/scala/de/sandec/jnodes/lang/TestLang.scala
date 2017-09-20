@@ -20,7 +20,8 @@ class TestLang {
                     |}
                     |}
                   """.stripMargin
-    Messages.langSource = ConfigFactory.parseString(config)
+
+    val Messages = new LangConfig(ConfigFactory.parseString(config))
 
     implicit val lang = new Lang(Locale.ENGLISH, Locale.GERMAN)
     val str1 = Messages("key1")
@@ -47,7 +48,7 @@ class TestLang {
                     |}
                   """.stripMargin
 
-    Messages.langSource = ConfigFactory.parseString(config)
+    val Messages = new LangConfig(ConfigFactory.parseString(config))
 
     implicit val lang = new Lang(Locale.GERMAN, Locale.ENGLISH)
     val str1 = Messages("key1", "A")
@@ -74,7 +75,7 @@ class TestLang {
                     |}
                   """.stripMargin
 
-    Messages.langSource = ConfigFactory.parseString(config)
+    val Messages = new LangConfig(ConfigFactory.parseString(config))
 
     implicit val lang = new Lang(Locale.ENGLISH, Locale.FRENCH)
     val str1 = Messages("key1", "A")
