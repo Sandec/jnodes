@@ -14,9 +14,9 @@ class LangConfig(val langSource: Config) {
     val fallKey  =  lang.fallback.getLanguage + "." + msg
 
     if(langSource.hasPath(prefKey)) {
-      langSource.getString(prefKey)
+      getFormattedString(langSource.getString(prefKey), args)(lang.prefered)
     } else if(langSource.hasPath(fallKey)) {
-      langSource.getString(fallKey)
+      getFormattedString(langSource.getString(fallKey), args)(lang.fallback)
     } else {
       msg + " NOT FOUND"
     }
