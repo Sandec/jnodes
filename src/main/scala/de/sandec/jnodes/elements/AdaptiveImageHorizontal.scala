@@ -10,9 +10,11 @@ class AdaptiveImageHorizontal(image: Image) extends Pane { PANE =>
 
   override def getContentBias = Orientation.HORIZONTAL
 
-  override def computeMinHeight (width: Double1 ): Double1 = { if(width <= 0.0) Double.MinValue else width * img.height / (img.width) }
-  override def computePrefHeight(width: Double1 ): Double1 = { if(width <= 0.0) 1 else width * img.height / (img.width) }
-  override def computeMaxHeight (width: Double1 ): Double1 = { if(width <= 0.0) Double.MaxValue else width * img.height / (img.width) }
+  def computeHeight(width: Double): Double = width * img.height / (img.width)
+
+  override def computeMinHeight (width: Double1 ): Double1 = { if(width <= 0.0) Double.MinValue else computeHeight(width) }
+  override def computePrefHeight(width: Double1 ): Double1 = { if(width <= 0.0) 1               else computeHeight(width) }
+  override def computeMaxHeight (width: Double1 ): Double1 = { if(width <= 0.0) Double.MaxValue else computeHeight(width) }
 
   def BackgroundImagePosition = new BackgroundSize(1.0,1.0, true, true, true, false)
 
