@@ -71,5 +71,4 @@ class FontResizingText extends Pane { THIS =>
   override def computePrefHeight(width: Double1 ): Double1 = content.prefHeight(width)
   override def computeMaxHeight (width: Double1 ): Double1 = Double.MaxValue
 
-
 }
