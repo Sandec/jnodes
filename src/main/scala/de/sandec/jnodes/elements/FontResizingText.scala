@@ -22,6 +22,7 @@ class FontResizingText extends Pane { THIS =>
   //}
   @Bind val content = new Text {
     styleClass ::= "font-resiszing-text-text"
+    styleClass ::= "text"
     this.text <-> THIS.text
     this.font <-> THIS.font
     this.textAlignment = TextAlignment.CENTER
