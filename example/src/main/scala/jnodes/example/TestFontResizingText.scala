@@ -23,6 +23,8 @@ object TestFontResizingText extends App
       }
     }
     center = new VBox {
+      padding = Insets(10)
+      spacing = 10
       def add(x: Int) = this <++ new FontResizingText {
         this.font <-- THIS.font
         this.text <-- THIS.text
@@ -37,13 +39,17 @@ object TestFontResizingText extends App
       add(180)
       //add(300)
       this <++ new VBox {
-        styleClass ::= "box1"
-        prefHeightProp = 200
-        this <++ new FontResizingText {
-          this.font <-- THIS.font
-          this.text <-- THIS.text
-          styleClass ::= "text1"
-          maxHeightProp = 100
+        styleClass ::= "box2"
+        prefHeightProp = 300
+        this <++ new StackPane {
+          styleClass ::= "box1"
+          //prefHeightProp = 200
+          this <++ new FontResizingText {
+            this.font <-- THIS.font
+            this.text <-- THIS.text
+            styleClass ::= "text1"
+            minHeightProp = 100
+          }
         }
       }
     }
@@ -54,6 +60,11 @@ object TestFontResizingText extends App
       s"""
          |.text1 {
          |  -fx-background-color : yellow;
+         |  -fx-border-width : 1px;
+         |  -fx-border-color : black;
+         |}
+         |.box2 {
+         |  -fx-background-color : blue;
          |  -fx-border-width : 1px;
          |  -fx-border-color : black;
          |}
