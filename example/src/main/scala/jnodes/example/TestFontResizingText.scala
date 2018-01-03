@@ -29,13 +29,15 @@ object TestFontResizingText extends App
         this.font <-- THIS.font
         this.text <-- THIS.text
         styleClass ::= "text1"
-        maxHeightProp = x
-        prefHeightProp = x
-        minHeightProp = x
+       // maxHeightProp = x
+       // prefHeightProp = x
+       // minHeightProp = x
       }
+      this <++ new Button
       add(20)
       add(50)
       add(100)
+      this <++ new Button
       add(180)
       //add(300)
       this <++ new VBox {
