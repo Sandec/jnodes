@@ -33,13 +33,13 @@ class FontResizingText extends Pane { THIS =>
     this <++ content
 
     font --> {
-      THIS.requestLayout()
+      this.requestLayout()
     }
     content.text --> {
-      THIS.requestLayout()
+      this.requestLayout()
     }
     THIS.wh --> {
-      THIS.requestLayout()
+      this.requestLayout()
     }
     override def layoutChildren(): Unit = {
       if(log) println("Font text: " + content.font)
