@@ -84,7 +84,8 @@ class FontResizingText extends Pane { THIS =>
   override def computePrefHeight(width: Double1 ): Double1 = UtilsPublic.computeTextHeight(font,text,width,TextBoundsType.LOGICAL)
   override def computeMaxHeight (width: Double1 ): Double1 = Double.MaxValue
 
-  override def computeMinWidth (height: Double1 ): Double1 = 1
-  override def computePrefWidth(height: Double1 ): Double1 = UtilsPublic.computeTextWidth(font,text,0.0)
-  override def computeMaxWidth (height: Double1 ): Double1 = Double.MaxValue
+  // IMPORTANT: This has weired effect, so we comment it out!
+  //override def computeMinWidth (height: Double1 ): Double1 = 1
+  //override def computePrefWidth(height: Double1 ): Double1 = UtilsPublic.computeTextWidth(font,text,0.0)
+  //override def computeMaxWidth (height: Double1 ): Double1 = Double.MaxValue
 }
