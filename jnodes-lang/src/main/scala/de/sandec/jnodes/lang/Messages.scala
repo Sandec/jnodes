@@ -18,7 +18,7 @@ class LangConfig(val langSource: Config) {
     } else if(langSource.hasPath(fallKey)) {
       getFormattedString(langSource.getString(fallKey), args)(lang.fallback)
     } else {
-      msg + " NOT FOUND"
+      s"$msg (${lang.prefered}) NOT FOUND "
     }
 
   }
