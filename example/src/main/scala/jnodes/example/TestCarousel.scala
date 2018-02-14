@@ -1,6 +1,6 @@
 package jnodes.example
 
-import de.sandec.jnodes.elements.{AdaptiveImageHorizontal, Carousel}
+import de.sandec.jnodes.elements.{AdaptiveImageHorizontal, Carousel, ScalingElement}
 import simplefx.all._
 import simplefx.core._
 import simplefx.experimental._
@@ -11,12 +11,14 @@ object TestCarousel extends App
   root = new VBox {
     prefWH = (500,500)
     fillWidth = true
-    this <++ new Carousel {
+
+    this <++ new ScalingElement(new Carousel {
+      style = "-fx-background-color: yellow"
       prefWH = (300,300)
       content <++ new Label("element a") {prefWH = (200,200)}
       content <++ new Label("element b")
       content <++ new Label("element c")
-    }
+    })
     this <++ new Carousel {
       maxWH = (300,300)
       content <++ new AdaptiveImageHorizontal(Image.cached("/test/image/1.png")) {
