@@ -10,8 +10,8 @@ class ScalingElement(node: Node) extends StackPane { THIS =>
 
   this <++ new StackPane {
     updated {
-      node.onMouseEntered --> { scaleXY :=  (scaleTo.to2D)   in (scaleIn) using Interpolator.EASE_OUT}
-      node.onMouseExited  --> { scaleXY :=  (1.0      .to2D) in (scaleIn) using Interpolator.EASE_OUT}
+      when( hover) --> { scaleXY :=  (scaleTo.to2D) in (scaleIn) using Interpolator.EASE_OUT}
+      when(!hover) --> { scaleXY :=  (1.0    .to2D) in (scaleIn) using Interpolator.EASE_OUT}
     }
     this <++ node
   }
