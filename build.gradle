@@ -22,7 +22,7 @@ buildscript {
 
     dependencies {
         classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
-        classpath "com.jprotechnologies.jpro:jpro-plugin-gradle:$JPRO_PLUGIN_VERSION"
+        classpath "com.sandec.jpro:jpro-plugin-gradle:$JPRO_PLUGIN_VERSION"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
@@ -37,14 +37,6 @@ allprojects {
 
         maven {
             url "http://sandec.bintray.com/repo"
-        }
-
-        maven {
-            url "http://mix-software.com:8081/nexus/content/repositories/jpro-snapshots"
-        }
-
-        maven {
-            url "http://mix-software.com:8081/nexus/content/repositories/jpro"
         }
     }
 
@@ -72,7 +64,7 @@ configure([project(':example')]) {
     //apply plugin: 'java'
     //apply plugin: 'de.sandec.simplefx'
     apply plugin: 'application'
-    apply plugin: 'com.jprotechnologies.jpro'
+    apply plugin: 'com.sandec.jpro'
 
     //mainClassName = 'jnodes.example.ScreenTest'
     mainClassName = 'jnodes.example.TestConfigurable'
