@@ -26,7 +26,6 @@ object DynamicCSS {
           parent.stylesheets ::= previousURL.toString
         }
       })
-
     }
   }
 
@@ -38,9 +37,11 @@ object DynamicCSS {
       updated(showingCSS --> { x =>
         val (showing: Boolean, cssString: String) = x
         if(previousURL != null) {
-          InMemoryURL.unregister(previousURL.getHost)
           stylesheets = stylesheets - previousURL.toString
           previousURL = null
+          runLater {
+            InMemoryURL.unregister(previousURL.getHost)
+          }
         }
         if(showing) {
           previousURL = InMemoryURL.genDynamicContent(cssString)
