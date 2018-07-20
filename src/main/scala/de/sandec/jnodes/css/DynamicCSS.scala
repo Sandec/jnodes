@@ -17,13 +17,15 @@ object DynamicCSS {
       updated(showingCSS --> { x =>
         val (showing: Boolean, cssString: String) = x
         if(previousURL != null) {
-          InMemoryURL.unregister(previousURL.getHost)
-          stylesheets = stylesheets - previousURL.toString
-          previousURL = null
+          parent.getStylesheets().remove(previousURL.toString)
+          runLater {
+            InMemoryURL.unregister(previousURL.getHost)
+            previousURL = null
+          }
         }
         if(showing) {
           previousURL = InMemoryURL.genDynamicContent(cssString)
-          parent.stylesheets ::= previousURL.toString
+          parent.getStylesheets().add(previousURL.toString)
         }
       })
     }
@@ -37,15 +39,15 @@ object DynamicCSS {
       updated(showingCSS --> { x =>
         val (showing: Boolean, cssString: String) = x
         if(previousURL != null) {
-          stylesheets = stylesheets - previousURL.toString
-          previousURL = null
+          scene.getStylesheets().remove(previousURL.toString)
           runLater {
             InMemoryURL.unregister(previousURL.getHost)
+            previousURL = null
           }
         }
         if(showing) {
           previousURL = InMemoryURL.genDynamicContent(cssString)
-          scene.stylesheets ::= previousURL.toString
+          scene.getStylesheets().add(previousURL.toString)
         }
       })
 
