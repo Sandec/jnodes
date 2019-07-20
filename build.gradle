@@ -23,7 +23,7 @@ buildscript {
     dependencies {
         classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
         classpath "com.sandec.jpro:jpro-plugin-gradle:$JPRO_PLUGIN_VERSION"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
@@ -93,6 +93,11 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
         jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless']
     }
 
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier.set("sources")
+    }
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -100,6 +105,7 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
                 groupId project.group
                 artifactId project.name
                 version project.version
+                artifact sourcesJar
             }
         }
     }
