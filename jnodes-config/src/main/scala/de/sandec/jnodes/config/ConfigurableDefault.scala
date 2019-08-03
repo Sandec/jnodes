@@ -1,7 +1,8 @@
 package de.sandec.jnodes.config
 
-import java.time.{LocalDateTime, ZoneId}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 import java.util.Date
+
 import de.sandec.jnodes.config.Configurable._
 import de.sandec.jnodes.config.DefaultValue._
 import simplefx.core._
@@ -229,24 +230,22 @@ class ConfigurableDefault {
 
       //def combineLocalDT(localDate: LocalDate, localTime: LocalTime): LocalDateTime = LocalDateTime.of(localDate, localTime)
 
-      val localDateTime = LocalDateTime.ofInstant((if(x.get == null) time.toDate else x.get).toInstant, ZoneId.systemDefault())
+      def toSQLDate(x: java.util.Date): java.sql.Date = x match {
+        case x: java.sql.Date => x
+        case x: java.util.Date => new java.sql.Date(x.getTime)
+      }
 
-      @Bind var localDate = localDateTime.toLocalDate
-      @Bind var localTime = localDateTime.toLocalTime
+      @Bind var localDate: LocalDate = toSQLDate(if(x.get == null) time.toDate else x.get).toLocalDate
+      //@Bind var localTime = localDateTime.toLocalTime
 
-      def setDateBindable = x := Date.from(LocalDateTime.of(localDate, localTime).atZone(ZoneId.systemDefault()).toInstant())
+      def setDateBindable = x := java.util.Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 
       localDate --> setDateBindable
-      localTime --> setDateBindable
 
       new VBox {
         <++ (new DatePicker{
           valueProperty.toBindable <-> localDate
         })
-        //<++ (new DatePicker{
-        //  this.setShowTime(true)
-        //  timeProperty.toBindable <-> localTime
-        //})
       }
     }
   }
