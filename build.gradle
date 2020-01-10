@@ -40,6 +40,7 @@ allprojects {
         }
     }
 
+
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
 
@@ -84,6 +85,20 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
     apply plugin: 'de.sandec.simplefx'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
+
+    apply plugin: 'com.google.osdetector'
+    ext.platform = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
+
+    dependencies {
+        // Add your dependencies here, for example:
+        compile "org.openjfx:javafx-base:11:$platform"
+        compile "org.openjfx:javafx-graphics:11:$platform"
+        compile "org.openjfx:javafx-controls:11:$platform"
+        compile "org.openjfx:javafx-fxml:11:$platform"
+        compile "org.openjfx:javafx-media:11:$platform"
+        compile "org.openjfx:javafx-web:11:$platform"
+        compile "org.openjfx:javafx-swing:11:$platform"
+    }
 
     dependencies {
         testCompile 'junit:junit:4.12'

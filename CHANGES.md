@@ -1,3 +1,7 @@
+
+## 0.6.0
+- Support for JavaFX11 and upwards
+
 ## 0.5.1
 - reworked configurable for date, it now also supports java.sql.Date
 

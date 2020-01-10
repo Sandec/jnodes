@@ -30,16 +30,15 @@
 
 package com.sun.javafx.scene.control.skin;
 
-import java.text.Bidi;
-import java.text.BreakIterator;
-import java.util.function.Consumer;
 
-import static javafx.scene.control.OverrunStyle.*;
-import javafx.application.Platform;
+import com.sun.javafx.scene.NodeHelper;
+import com.sun.javafx.scene.control.behavior.TextBinding;
+import com.sun.javafx.scene.text.TextLayout;
+import com.sun.javafx.tk.Toolkit;
 import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
@@ -50,17 +49,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.OverrunStyle;
+import com.sun.javafx.scene.control.ContextMenuContent;
+import com.sun.javafx.scene.text.FontHelper;
+import java.net.URL;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.text.HitInfo;
 
-import com.sun.javafx.scene.control.behavior.TextBinding;
-import com.sun.javafx.scene.text.HitInfo;
-import com.sun.javafx.scene.text.TextLayout;
-import com.sun.javafx.tk.Toolkit;
-import javafx.util.Callback;
+import java.text.Bidi;
+import java.util.Locale;
+import java.util.function.Consumer;
+
+import static javafx.scene.control.OverrunStyle.CENTER_ELLIPSIS;
+import static javafx.scene.control.OverrunStyle.CENTER_WORD_ELLIPSIS;
+import static javafx.scene.control.OverrunStyle.CLIP;
+import static javafx.scene.control.OverrunStyle.ELLIPSIS;
+import static javafx.scene.control.OverrunStyle.LEADING_ELLIPSIS;
+import static javafx.scene.control.OverrunStyle.LEADING_WORD_ELLIPSIS;
+import static javafx.scene.control.OverrunStyle.WORD_ELLIPSIS;
+
 
 /**
  * BE REALLY CAREFUL WITH RESTORING OR RESETTING STATE OF helper NODE AS LEFTOVER
@@ -88,8 +99,8 @@ public class UtilsPublic {
      * */
     static final TextLayout layout = Toolkit.getToolkit().getTextLayoutFactory().createLayout();
 
-    static double getAscent(Font font, TextBoundsType boundsType) {
-        layout.setContent("", font.impl_getNativeFont());
+    public static double getAscent(Font font, TextBoundsType boundsType) {
+        layout.setContent("", FontHelper.getNativeFont(font));
         layout.setWrapWidth(0);
         layout.setLineSpacing(0);
         if (boundsType == TextBoundsType.LOGICAL_VERTICAL_CENTER) {
@@ -101,7 +112,7 @@ public class UtilsPublic {
     }
 
     public static double getLineHeight(Font font, TextBoundsType boundsType) {
-        layout.setContent("", font.impl_getNativeFont());
+        layout.setContent("", FontHelper.getNativeFont(font));
         layout.setWrapWidth(0);
         layout.setLineSpacing(0);
         if (boundsType == TextBoundsType.LOGICAL_VERTICAL_CENTER) {
@@ -115,7 +126,7 @@ public class UtilsPublic {
     }
 
     public static double computeTextWidth(Font font, String text, double wrappingWidth) {
-        layout.setContent(text != null ? text : "", font.impl_getNativeFont());
+        layout.setContent(text != null ? text : "", FontHelper.getNativeFont(font));
         layout.setWrapWidth((float)wrappingWidth);
         return layout.getBounds().getWidth();
     }
@@ -126,7 +137,7 @@ public class UtilsPublic {
 
     @SuppressWarnings("deprecation")
     public static double computeTextHeight(Font font, String text, double wrappingWidth, double lineSpacing, TextBoundsType boundsType) {
-        layout.setContent(text != null ? text : "", font.impl_getNativeFont());
+        layout.setContent(text != null ? text : "", FontHelper.getNativeFont(font));
         layout.setWrapWidth((float)wrappingWidth);
         layout.setLineSpacing((float)lineSpacing);
         if (boundsType == TextBoundsType.LOGICAL_VERTICAL_CENTER) {
@@ -137,7 +148,52 @@ public class UtilsPublic {
         return layout.getBounds().getHeight();
     }
 
-    static int computeTruncationIndex(Font font, String text, double width) {
+    public static Point2D computeMnemonicPosition(Font font, String text, int mnemonicIndex, double wrappingWidth,
+                                                  double lineSpacing) {
+        // Input validation
+        if ((font == null) || (text == null) ||
+                (mnemonicIndex < 0) || (mnemonicIndex > text.length())) {
+            return null;
+        }
+
+        // Layout the text with given font, wrapping width and line spacing
+        layout.setContent(text, FontHelper.getNativeFont(font));
+        layout.setWrapWidth((float)wrappingWidth);
+        layout.setLineSpacing((float)lineSpacing);
+
+        // The text could be spread over multiple lines
+        // We need to find out on which line the mnemonic character lies
+        int start = 0;
+        int i = 0;
+        int totalLines = layout.getLines().length;
+        while (i < totalLines) {
+            int lineLength = layout.getLines()[i].getLength();
+
+            if ((mnemonicIndex >= start) &&
+                    (mnemonicIndex < (start + lineLength))) {
+                // mnemonic lies on line 'i'
+                break;
+            }
+
+            start += lineLength;
+            i++;
+        }
+
+        // Find x and y offsets of mnemonic character position
+        // in line numbered 'i'
+        double lineHeight = layout.getBounds().getHeight() / totalLines;
+        double x = Utils.computeTextWidth(font, text.substring(start, mnemonicIndex), 0);
+
+        double y = (lineHeight * (i+1));
+        // Adjust y offset for linespacing except for the last line.
+        if ((i+1) != totalLines) {
+            y -= (lineSpacing / 2);
+        }
+
+        return new Point2D(x, y);
+    }
+
+    public static int computeTruncationIndex(Font font, String text, double width) {
         helper.setText(text);
         helper.setFont(font);
         helper.setWrappingWidth(0);
@@ -147,7 +203,7 @@ public class UtilsPublic {
         // clear what causes the small discrepancies.
         Bounds bounds = helper.getLayoutBounds();
         Point2D endPoint = new Point2D(width - 2, bounds.getMinY() + bounds.getHeight() / 2);
-        final int index = helper.impl_hitTestChar(endPoint).getCharIndex();
+        final int index = helper.hitTest(endPoint).getCharIndex();
         // RESTORE STATE
         helper.setWrappingWidth(DEFAULT_WRAPPING_WIDTH);
         helper.setLineSpacing(DEFAULT_LINE_SPACING);
@@ -155,8 +211,8 @@ public class UtilsPublic {
         return index;
     }
 
-    static String computeClippedText(Font font, String text, double width,
-                                     OverrunStyle type, String ellipsisString) {
+    public static String computeClippedText(Font font, String text, double width,
+                                            OverrunStyle type, String ellipsisString) {
         if (font == null) {
             throw new IllegalArgumentException("Must specify a font");
         }
@@ -356,9 +412,9 @@ public class UtilsPublic {
         }
     }
 
-    static String computeClippedWrappedText(Font font, String text, double width,
-                                            double height, OverrunStyle truncationStyle,
-                                            String ellipsisString, TextBoundsType boundsType) {
+    public static String computeClippedWrappedText(Font font, String text, double width,
+                                                   double height, OverrunStyle truncationStyle,
+                                                   String ellipsisString, TextBoundsType boundsType) {
         if (font == null) {
             throw new IllegalArgumentException("Must specify a font");
         }
@@ -403,13 +459,13 @@ public class UtilsPublic {
         // This should be the first character of a line that would be clipped.
         Point2D endPoint = new Point2D(0, height - helper.getBaselineOffset());
 
-        int hit = helper.impl_hitTestChar(endPoint).getCharIndex();
+        int hit = helper.hitTest(endPoint).getCharIndex();
         if (hit >= len) {
             helper.setBoundsType(TextBoundsType.LOGICAL); // restore
             return text;
         }
         if (center) {
-            hit = helper.impl_hitTestChar(centerPoint).getCharIndex();
+            hit = helper.hitTest(centerPoint).getCharIndex();
         }
 
         if (hit > 0 && hit < len) {
@@ -470,7 +526,7 @@ public class UtilsPublic {
             // If so, remove one char or word at a time.
             while (true) {
                 helper.setText(result);
-                int hit2 = helper.impl_hitTestChar(endPoint).getCharIndex();
+                int hit2 = helper.hitTest(endPoint).getCharIndex();
                 if (center && hit2 < centerLen) {
                     // No room for text after ellipsis. Maybe there is a newline
                     // here, and the next line falls outside the view.
@@ -634,11 +690,11 @@ public class UtilsPublic {
         return Math.min(Math.max(value, min), Math.max(min,max));
     }
 
-    static void addMnemonics(ContextMenu popup, Scene scene) {
+    public static void addMnemonics(ContextMenu popup, Scene scene) {
         addMnemonics(popup, scene, false);
     }
 
-    static void addMnemonics(ContextMenu popup, Scene scene, boolean initialState) {
+    public static void addMnemonics(ContextMenu popup, Scene scene, boolean initialState) {
 
         if (!com.sun.javafx.PlatformUtil.isMac()) {
 
@@ -648,8 +704,8 @@ public class UtilsPublic {
             for (int i = 0 ; i < popup.getItems().size() ; i++) {
                 menuitem = popup.getItems().get(i);
                 /*
-                ** check is there are any mnemonics in this menu
-                */
+                 ** check is there are any mnemonics in this menu
+                 */
                 if (menuitem.isMnemonicParsing()) {
 
                     TextBinding bindings = new TextBinding(menuitem.getText());
@@ -658,7 +714,7 @@ public class UtilsPublic {
                         KeyCombination mnemonicKeyCombo = bindings.getMnemonicKeyCombination();
                         Mnemonic myMnemonic = new Mnemonic(cmContent.getLabelAt(i), mnemonicKeyCombo);
                         scene.addMnemonic(myMnemonic);
-                        cmContent.getLabelAt(i).impl_setShowMnemonics(initialState);
+                        NodeHelper.setShowMnemonics(cmContent.getLabelAt(i), initialState);
                     }
                 }
             }
@@ -667,7 +723,7 @@ public class UtilsPublic {
 
 
 
-    static void removeMnemonics(ContextMenu popup, Scene scene) {
+    public static void removeMnemonics(ContextMenu popup, Scene scene) {
 
         if (!com.sun.javafx.PlatformUtil.isMac()) {
 
@@ -677,8 +733,8 @@ public class UtilsPublic {
             for (int i = 0 ; i < popup.getItems().size() ; i++) {
                 menuitem = popup.getItems().get(i);
                 /*
-                ** check is there are any mnemonics in this menu
-                */
+                 ** check is there are any mnemonics in this menu
+                 */
                 if (menuitem.isMnemonicParsing()) {
 
                     TextBinding bindings = new TextBinding(menuitem.getText());
@@ -700,7 +756,7 @@ public class UtilsPublic {
         }
     }
 
-    static double computeXOffset(double width, double contentWidth, HPos hpos) {
+    public static double computeXOffset(double width, double contentWidth, HPos hpos) {
         if (hpos == null) {
             return 0;
         }
@@ -717,7 +773,7 @@ public class UtilsPublic {
         }
     }
 
-    static double computeYOffset(double height, double contentHeight, VPos vpos) {
+    public static double computeYOffset(double height, double contentHeight, VPos vpos) {
         if (vpos == null) {
             return 0;
         }
@@ -735,38 +791,18 @@ public class UtilsPublic {
     }
 
     /*
-    ** Returns true if the platform is to use Two-Level-Focus.
-    ** This is in the Util class to ease any changes in
-    ** the criteria for enabling this feature.
-    **
-    ** TwoLevelFocus is needed on platforms that
-    ** only support 5-button navigation (arrow keys and Select/OK).
-    **
-    */
+     ** Returns true if the platform is to use Two-Level-Focus.
+     ** This is in the Util class to ease any changes in
+     ** the criteria for enabling this feature.
+     **
+     ** TwoLevelFocus is needed on platforms that
+     ** only support 5-button navigation (arrow keys and Select/OK).
+     **
+     */
     public static boolean isTwoLevelFocus() {
         return Platform.isSupported(ConditionalFeature.TWO_LEVEL_FOCUS);
     }
 
-
-    // Workaround for RT-26961. HitInfo.getInsertionIndex() doesn't skip
-    // complex character clusters / ligatures.
-    private static BreakIterator charIterator = null;
-    public static int getHitInsertionIndex(HitInfo hit, String text) {
-        int charIndex = hit.getCharIndex();
-        if (text != null && !hit.isLeading()) {
-            if (charIterator == null) {
-                charIterator = BreakIterator.getCharacterInstance();
-            }
-            charIterator.setText(text);
-            int next = charIterator.following(charIndex);
-            if (next == BreakIterator.DONE) {
-                charIndex = hit.getInsertionIndex();
-            } else {
-                charIndex = next;
-            }
-        }
-        return charIndex;
-    }
 
     // useful method for linking things together when before a property is
     // necessarily set
@@ -790,4 +826,20 @@ public class UtilsPublic {
             p.addListener(listener);
         }
     }
+
+    public static String formatHexString(Color c) {
+        if (c != null) {
+            return String.format((Locale) null, "#%02x%02x%02x",
+                    Math.round(c.getRed() * 255),
+                    Math.round(c.getGreen() * 255),
+                    Math.round(c.getBlue() * 255));
+        } else {
+            return null;
+        }
+    }
+
+    public static URL getResource(String str) {
+        return Utils.class.getResource(str);
+    }
+
 }
