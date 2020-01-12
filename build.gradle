@@ -44,6 +44,11 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
 
+    simplefx {
+        scalaVersion = "$SCALA_VERSION"
+        scalaVersionShort = "$SCALA_VERSION_SHORT"
+    }
+
     group = 'SANDEC'
     version = "$jnodesVersion"
 

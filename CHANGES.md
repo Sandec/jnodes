@@ -1,4 +1,5 @@
-
+## 0.6.1
+- Build based on Scala 2.12
 ## 0.6.0
 - Support for JavaFX11 and upwards
 
