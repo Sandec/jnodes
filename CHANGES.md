@@ -1,3 +1,7 @@
+## 0.6.3
+- Fixed publishing of source code.
+- Updated Gradle and SimpleFX
+
 ## 0.6.1
 - Build based on Scala 2.12
 ## 0.6.0

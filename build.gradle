@@ -134,9 +134,9 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
         jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless']
     }
 
-    task sourcesJar(type: Jar) {
-        from sourceSets.main.allJava
-        archiveClassifier.set("sources")
+    java {
+        withJavadocJar()
+        withSourcesJar()
     }
 
     publishing {
@@ -146,7 +146,6 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
                 groupId project.group
                 artifactId project.name
                 version project.version
-                artifact sourcesJar
             }
         }
     }
