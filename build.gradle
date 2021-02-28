@@ -74,8 +74,9 @@ configure([project(':example')]) {
     apply plugin: 'application'
     apply plugin: 'com.sandec.jpro'
 
-    //mainClassName = 'jnodes.example.ScreenTest'
-    mainClassName = 'jnodes.example.TestConfigurable'
+    //mainClassName = 'jnodes.example.StartScreenTest'
+    mainClassName = 'jnodes.example.StartTestConfigurable'
+    mainClassName = 'jnodes.example.StartTestCSS'
 
     jpro {
         if (project.hasProperty('JPRO_LICENSE_USERNAME')) {

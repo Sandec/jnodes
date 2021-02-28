@@ -4,6 +4,10 @@ import simplefx.all._
 import simplefx.core._
 import de.sandec.jnodes.css.DynamicCSS._
 
+object StartTestCSS extends App {
+  javafx.application.Application.launch(classOf[TestCSS])
+}
+
 object TestCSS extends App
 @SimpleFXApp class TestCSS { THIS =>
 

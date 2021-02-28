@@ -6,6 +6,8 @@ import java.net.{URL, URLConnection, URLStreamHandler, URLStreamHandlerFactory}
 import simplefx.core._
 import simplefx.all._
 import simplefx.util.Predef._
+import java.io.PrintWriter
+import java.io.File
 
 object DynamicCSS {
 
@@ -14,17 +16,23 @@ object DynamicCSS {
     @Bind private var showingCSS = <--((this.isShowing,cssString))
     @Bind var cssString: String = "" <> {
       var previousURL: URL = null
+      var previousKey: String = null
       updated(showingCSS --> { x =>
         val (showing: Boolean, cssString: String) = x
         if(previousURL != null) {
           parent.getStylesheets().remove(previousURL.toString)
+
+          val pKey = previousKey
+          previousURL = null
+          previousKey = null
           runLater {
-            InMemoryURL.unregister(previousURL.getHost)
-            previousURL = null
+            InMemoryURL.unregister(pKey)
           }
         }
         if(showing) {
-          previousURL = InMemoryURL.genDynamicContent(cssString)
+          val r = InMemoryURL.genDynamicContent(cssString)
+          previousKey = r._1
+          previousURL = r._2
           parent.getStylesheets().add(previousURL.toString)
         }
       })
@@ -36,17 +44,22 @@ object DynamicCSS {
     @Bind private var showingCSS = <--((this.isShowing,cssString))
     @Bind var cssString: String = "" <> {
       var previousURL: URL = null
+      var previousKey: String = null
       updated(showingCSS --> { x =>
         val (showing: Boolean, cssString: String) = x
         if(previousURL != null) {
           scene.getStylesheets().remove(previousURL.toString)
+          val pKey = previousKey
+          previousURL = null
+          previousKey = null
           runLater {
-            InMemoryURL.unregister(previousURL.getHost)
-            previousURL = null
+            InMemoryURL.unregister(pKey)
           }
         }
         if(showing) {
-          previousURL = InMemoryURL.genDynamicContent(cssString)
+          val r = InMemoryURL.genDynamicContent(cssString)
+          previousKey = r._1
+          previousURL = r._2
           scene.getStylesheets().add(previousURL.toString)
         }
       })
@@ -62,53 +75,41 @@ object InMemoryURL {
 
   def log = false
 
-  val inmemoryProtocol = "inmemory"
-
   var contentMap: Map[String,String] = Map()
   var counter = 0
 
-  def genDynamicContent(content: String): URL = synchronized {
+  var files = java.io.File.createTempFile("cssfiles","")
+  println("files" + files.exists())
+  println("files" + files.isDirectory)
+  files.delete()
+  assert(files.mkdirs)
+  files.deleteOnExit
+
+  def genDynamicContent(content: String): (String,URL) = synchronized {
     counter += 1
-    registerContent(s"content$counter", content)
+    val key = s"content$counter"
+    (key, registerContent(key, content))
   }
 
+  def getFile(x: String) = new File(files,x+".css")
   def registerContent(x: String, content: String): URL = synchronized {
     if(log) println("registering content: " + (x -> content))
     contentMap += (x -> content)
-    new URL(inmemoryProtocol, x, "")
+    val f = getFile(x)
+    new PrintWriter(f) { write(content); close }
+    f.toURI.toURL
   }
 
-  def unregister(x: String) = synchronized {
+  def unregister(x: String): Unit = synchronized {
     if(log) println("unregister: " + x)
     assert(contentMap.contains(x))
     contentMap -= x
+    getFile(x).delete()
     if(log) println("keys in map: " + contentMap.keys.toList)
   }
 
   def getContent(x: String) = synchronized {
     contentMap(x)
-  }
-
-  URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory {
-    val streamHandler = new URLStreamHandler() {
-      override protected def openConnection(url: URL): URLConnection = {
-        if (url.getProtocol == inmemoryProtocol) {
-          return new StringURLConnection(url, getContent(url.getHost))
-        } else {
-          throw new FileNotFoundException
-        }
-      }
-    }
-
-    override def createURLStreamHandler(protocol: String): URLStreamHandler = {
-      if (inmemoryProtocol == protocol) return streamHandler
-      null
-    }
-  })
-
-  class StringURLConnection(url: URL, content: String) extends URLConnection(url) {
-    override def connect(): Unit = ()
-    override def getInputStream = new StringBufferInputStream(content)
   }
 
 }
