@@ -1,6 +1,6 @@
 package de.sandec.jnodes.elements
 
-import com.sun.javafx.scene.control.skin.UtilsPublic
+import de.sandec.jnodes.fork.UtilsPublic
 import simplefx.all._
 import simplefx.core._
 

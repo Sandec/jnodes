@@ -8,6 +8,6 @@ local:
 
 note: you have to bintray-account in ~/.gradle/gradle.properties
 ```gradle
-./gradlew :bintrayUpload jnodes-devices:bintrayUpload jnodes-config:bintrayUpload jnodes-lang:bintrayUpload
+./gradlew :publish jnodes-devices:publish jnodes-config:publish jnodes-lang:publish
 ```
 

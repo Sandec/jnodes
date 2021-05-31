@@ -28,9 +28,9 @@
  * and open the template in the editor.
  */
 
-package com.sun.javafx.scene.control.skin;
+package de.sandec.jnodes.fork;
 
-
+import com.sun.javafx.scene.control.skin.Utils;
 import com.sun.javafx.scene.NodeHelper;
 import com.sun.javafx.scene.control.behavior.TextBinding;
 import com.sun.javafx.scene.text.TextLayout;

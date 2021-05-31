@@ -1,3 +1,7 @@
+## 0.7.1
+ - removed bintray
+ - better support for the java module system
+
 ## 0.6.3
 - Fixed publishing of source code.
 - Updated Gradle and SimpleFX
