@@ -1,3 +1,6 @@
+## 0.7.2
+ - ContextManager now uses getStyleableParent
+
 ## 0.7.1
  - removed bintray
  - better support for the java module system

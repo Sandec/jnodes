@@ -10,8 +10,12 @@ class ContextManager[A] {
     private[context] def getContext: A = {
       if(context != null) context
       else {
-        assert((x.parent != null),"Couldn't find SessionManager!")
-        x.parent.getContext
+        if(x.getStyleableParent != null &&  x.getStyleableParent.isInstanceOf[Node]) {
+          x.getStyleableParent.asInstanceOf[Node].getContext
+        } else {
+          assert(false,"Couldn't find SessionManager!")
+          ???
+        }
       }
     }
   }
