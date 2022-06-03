@@ -20,3 +20,5 @@ shared/src/main/resources/application.conf
 RUNNING_PID
 .metals
 .vscode
+out
+/logs
