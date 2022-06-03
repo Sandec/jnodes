@@ -1,4 +1,6 @@
 
+## 0.7.4
+ - dependencies on javafx or now "compileOnly"
 ## 0.7.3
  - updated simplefx
  - mac arm support for the build

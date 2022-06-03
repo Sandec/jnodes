@@ -81,6 +81,7 @@ configure([project(':example')]) {
 
     javafx {
         version = "$JAVAFX_VERSION"
+        configuration = 'compileOnly'
         modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 }
@@ -100,6 +101,7 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
 
     javafx {
         version = "$JAVAFX_VERSION"
+        configuration = 'compileOnly'
         modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 
