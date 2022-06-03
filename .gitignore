@@ -14,3 +14,9 @@ benchmarks/*
 quizmax/src/android/AndroidManifest.xml
 shared/src/main/resources/quizmax.version
 shared/src/main/resources/application.conf
+.history
+/example/out
+.DS_Store
+RUNNING_PID
+.metals
+.vscode
