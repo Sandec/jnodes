@@ -3,6 +3,7 @@ System.setProperty("file.encoding", "UTF-8")
 buildscript {
     repositories {
         jcenter()
+        gradlePluginPortal()
         maven {
             url "${System.properties['user.home']}/.m2/repository/"
         }
@@ -10,19 +11,12 @@ buildscript {
         maven {
             url "https://sandec.jfrog.io/artifactory/repo"
         }
-
-        maven {
-            url "http://mix-software.com:8081/nexus/content/repositories/jpro-snapshots"
-        }
-
-        maven {
-            url "http://mix-software.com:8081/nexus/content/repositories/jpro"
-        }
     }
 
     dependencies {
+        classpath 'org.openjfx:javafx-plugin:0.0.13'
         classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
-        classpath "com.sandec.jpro:jpro-plugin-gradle:$JPRO_PLUGIN_VERSION"
+        classpath "com.sandec.jpro:jpro-plugin-gradle:$JPRO_VERSION"
     }
 }
 
@@ -52,19 +46,19 @@ allprojects {
     version = "$jnodesVersion"
 
     dependencies {
-        testCompile "junit:junit:4.12"
+        testImplementation "junit:junit:4.12"
     }
 }
 
 configure([project(':example')]) {
     dependencies {
-        compile rootProject
-        compile project(':jnodes-devices')
-        compile project(':jnodes-config')
+        implementation rootProject
+        implementation project(':jnodes-devices')
+        implementation project(':jnodes-config')
 
         // shouldn't be required, have to investigate!
-        compile group: 'org.scala-lang', name: 'scala-reflect', version: SCALA_VERSION
-        compile "org.scala-lang:scala-reflect:$SCALA_VERSION"
+        implementation group: 'org.scala-lang', name: 'scala-reflect', version: SCALA_VERSION
+        implementation "org.scala-lang:scala-reflect:$SCALA_VERSION"
     }
     //apply plugin: 'java'
     //apply plugin: 'de.sandec.simplefx'
@@ -83,18 +77,11 @@ configure([project(':example')]) {
         }
     }
 
-    apply plugin: 'com.google.osdetector'
-    ext.platform = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
+    apply plugin: 'org.openjfx.javafxplugin'
 
-    dependencies {
-        // Add your dependencies here, for example:
-        compile "org.openjfx:javafx-base:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-graphics:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-controls:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-fxml:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-media:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-web:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-swing:$JAVAFX_VERSION:$platform"
+    javafx {
+        version = "$JAVAFX_VERSION"
+        modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 }
 
@@ -109,22 +96,15 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
         scalaVersionShort = "$SCALA_VERSION_SHORT"
     }
 
-    apply plugin: 'com.google.osdetector'
-    ext.platform = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
+    apply plugin: 'org.openjfx.javafxplugin'
 
-    dependencies {
-        // Add your dependencies here, for example:
-        compile "org.openjfx:javafx-base:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-graphics:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-controls:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-fxml:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-media:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-web:$JAVAFX_VERSION:$platform"
-        compile "org.openjfx:javafx-swing:$JAVAFX_VERSION:$platform"
+    javafx {
+        version = "$JAVAFX_VERSION"
+        modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 
     dependencies {
-        testCompile 'junit:junit:4.12'
+        testImplementation 'junit:junit:4.12'
     }
 
     test {
@@ -161,23 +141,23 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
 
 configure([project(':jnodes-devices')]) {
     dependencies {
-        compile rootProject
-        testCompile 'junit:junit:4.12'
+        implementation rootProject
+        testImplementation 'junit:junit:4.12'
     }
 }
 
 configure([project(':jnodes-config')]) {
     dependencies {
-        compile rootProject
-        testCompile 'junit:junit:4.12'
+        implementation rootProject
+        testImplementation 'junit:junit:4.12'
     }
 }
 
 configure([project(':jnodes-lang')]) {
     dependencies {
-        compile rootProject
-        compile "com.typesafe:config:1.3.1"
-        testCompile 'junit:junit:4.12'
+        implementation rootProject
+        implementation "com.typesafe:config:1.3.1"
+        testImplementation 'junit:junit:4.12'
     }
 }
 

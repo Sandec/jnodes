@@ -1,3 +1,10 @@
+
+## 0.7.3
+ - updated simplefx
+ - mac arm support for the build
+ - removed dependency on javafx-jars with mac classifier
+ - updated to latest gradle version
+
 ## 0.7.2
  - ContextManager now uses getStyleableParent
 
