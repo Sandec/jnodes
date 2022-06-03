@@ -1,4 +1,7 @@
 
+## 0.7.5
+ - ADDED targetCompatibility=11
+
 ## 0.7.4
  - dependencies on javafx or now "compileOnly"
 ## 0.7.3

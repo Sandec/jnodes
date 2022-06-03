@@ -35,6 +35,8 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'de.sandec.simplefx'
 
+    targetCompatibility = "11"
+    sourceCompatibility = "11"
     compileScala.targetCompatibility = 1.8
 
     simplefx {
