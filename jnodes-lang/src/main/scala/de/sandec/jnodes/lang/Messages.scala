@@ -4,7 +4,7 @@ import java.text.MessageFormat
 import java.util.Locale
 import com.typesafe.config.{Config, ConfigException, ConfigFactory}
 
-class Lang(val fallback: Locale, val prefered: Locale)
+case class Lang(val fallback: Locale, val prefered: Locale)
 
 class LangConfig(val langSource: Config) {
 

@@ -1,4 +1,7 @@
 
+## 0.7.6
+ - Lang is now a case class, providing proper toString method, and equals/hashcode methods.
+
 ## 0.7.5
  - ADDED targetCompatibility=11
 
