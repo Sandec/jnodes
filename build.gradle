@@ -70,6 +70,7 @@ configure([project(':example')]) {
     //mainClassName = 'jnodes.example.StartScreenTest'
     mainClassName = 'jnodes.example.StartTestConfigurable'
     mainClassName = 'jnodes.example.StartTestCSS'
+    mainClassName = 'jnodes.example.TestFontResizingText'
 
     jpro {
         if (project.hasProperty('JPRO_LICENSE_USERNAME')) {
@@ -83,7 +84,6 @@ configure([project(':example')]) {
 
     javafx {
         version = "$JAVAFX_VERSION"
-        configuration = 'compileOnly'
         modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 }
