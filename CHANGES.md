@@ -1,4 +1,5 @@
-
+## 0.8.0
+ - Modularize each project to support the Java Module System
 ## 0.7.6
  - Lang is now a case class, providing proper toString method, and equals/hashcode methods.
 
