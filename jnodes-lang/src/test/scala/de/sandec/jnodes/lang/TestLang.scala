@@ -1,7 +1,8 @@
 package de.sandec.jnodes.lang
 
 import com.typesafe.config.ConfigFactory
-import org.junit._
+import org.junit.jupiter.api.Test
+
 import java.util.Locale
 
 class TestLang {

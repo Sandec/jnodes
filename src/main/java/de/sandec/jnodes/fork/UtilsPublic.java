@@ -58,7 +58,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import javafx.scene.text.HitInfo;
 
 import java.text.Bidi;
 import java.util.Locale;

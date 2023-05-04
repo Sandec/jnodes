@@ -14,9 +14,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.openjfx:javafx-plugin:0.0.13'
-        classpath "SANDEC:simplefx-plugin-gradle:$simplefxVersion"
-        classpath "com.sandec.jpro:jpro-plugin-gradle:$JPRO_VERSION"
+        classpath 'org.openjfx:javafx-plugin:0.0.14'
+        classpath "SANDEC:simplefx-plugin-gradle:$SIMPLEFX_VERSION"
+        classpath "one.jpro:jpro-gradle-plugin:$JPRO_VERSION"
     }
 }
 
@@ -31,8 +31,7 @@ allprojects {
         }
     }
 
-
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'de.sandec.simplefx'
 
     targetCompatibility = "11"
@@ -45,10 +44,11 @@ allprojects {
     }
 
     group = 'SANDEC'
-    version = "$jnodesVersion"
+    version = "$JNODES_VERSION"
 
     dependencies {
-        testImplementation "junit:junit:4.12"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
     }
 }
 
@@ -65,7 +65,7 @@ configure([project(':example')]) {
     //apply plugin: 'java'
     //apply plugin: 'de.sandec.simplefx'
     apply plugin: 'application'
-    apply plugin: 'com.sandec.jpro'
+    apply plugin: 'jpro-gradle-plugin'
 
     //mainClassName = 'jnodes.example.StartScreenTest'
     mainClassName = 'jnodes.example.StartTestConfigurable'
@@ -103,15 +103,13 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
 
     javafx {
         version = "$JAVAFX_VERSION"
-        configuration = 'compileOnly'
+        configurations = ["compileOnly", "testImplementation"]
         modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.web', 'javafx.swing' ]
     }
 
-    dependencies {
-        testImplementation 'junit:junit:4.12'
-    }
-
     test {
+        useJUnitPlatform()
+
         jvmArgs = ['-Dglass.platform=Monocle', '-Dmonocle.platform=Headless']
     }
 
@@ -143,25 +141,56 @@ configure([rootProject, project(':jnodes-devices'), project(':jnodes-lang') ,pro
 
 }
 
+configure(rootProject) {
+    compileJava {
+        options.compilerArgs = [
+                "--add-exports", "javafx.controls/com.sun.javafx.scene.control=de.sandec.jnodes",
+                "--add-exports", "javafx.graphics/com.sun.javafx.scene.text=de.sandec.jnodes",
+                "--add-exports", "javafx.controls/com.sun.javafx.scene.control.skin=de.sandec.jnodes",
+                "--add-exports", "javafx.graphics/com.sun.javafx.scene=de.sandec.jnodes",
+                "--add-exports", "javafx.controls/com.sun.javafx.scene.control.behavior=de.sandec.jnodes",
+                "--add-exports", "javafx.graphics/com.sun.javafx.tk=de.sandec.jnodes",
+                "--add-exports", "javafx.base/com.sun.javafx=de.sandec.jnodes",
+                "--add-exports", "javafx.graphics/com.sun.javafx.geom=de.sandec.jnodes"
+        ]
+    }
+
+    javadoc {
+        options {
+            encoding = 'UTF-8'
+            version = true
+            author = true
+            addMultilineStringsOption("-add-exports").setValue([
+                    "javafx.controls/com.sun.javafx.scene.control=de.sandec.jnodes",
+                    "javafx.graphics/com.sun.javafx.scene.text=de.sandec.jnodes",
+                    "javafx.controls/com.sun.javafx.scene.control.skin=de.sandec.jnodes",
+                    "javafx.graphics/com.sun.javafx.scene=de.sandec.jnodes",
+                    "javafx.controls/com.sun.javafx.scene.control.behavior=de.sandec.jnodes",
+                    "javafx.graphics/com.sun.javafx.tk=de.sandec.jnodes",
+                    "javafx.base/com.sun.javafx=de.sandec.jnodes",
+                    "javafx.graphics/com.sun.javafx.geom=de.sandec.jnodes"
+            ])
+            addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
 configure([project(':jnodes-devices')]) {
     dependencies {
-        implementation rootProject
-        testImplementation 'junit:junit:4.12'
+        api rootProject
     }
 }
 
 configure([project(':jnodes-config')]) {
     dependencies {
-        implementation rootProject
-        testImplementation 'junit:junit:4.12'
+        api rootProject
     }
 }
 
 configure([project(':jnodes-lang')]) {
     dependencies {
-        implementation rootProject
-        implementation "com.typesafe:config:1.3.1"
-        testImplementation 'junit:junit:4.12'
+        api rootProject
+        implementation "com.typesafe:config:1.4.2"
     }
 }
 
