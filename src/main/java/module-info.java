@@ -3,6 +3,7 @@
  */
 module de.sandec.jnodes {
     requires transitive javafx.controls;
+    requires transitive simplefx.core;
 
     exports de.sandec.jnodes.context;
     exports de.sandec.jnodes.css;
