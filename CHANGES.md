@@ -1,3 +1,6 @@
+## 0.8.1
+ - Fixed the ContextManager, it now properly handles Popups - redirecting to the "parent node" of the window.
+
 ## 0.8.0
  - Modularize each project to support the Java Module System
 ## 0.7.6
