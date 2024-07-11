@@ -4,6 +4,8 @@
 module de.sandec.jnodes {
     requires transitive javafx.controls;
     requires transitive simplefx.core;
+    requires transitive simplefx.wrapping;
+    requires scala.library;
 
     exports de.sandec.jnodes.context;
     exports de.sandec.jnodes.css;
