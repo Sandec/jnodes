@@ -1,10 +1,10 @@
-## 0.8.3
+## 0.8.3 (October 14, 2024)
 - Updated JPro dependencies to version `2024.3.3`
 - Updated SimpleFX modularized dependencies to version `3.2.37`
 - Updated JavaFX to version `17.0.12`
 - Updated Gradle wrapper to version `8.10.2`
 
-## 0.8.2
+## 0.8.2 (July 11, 2024)
 - Updated SimpleFX modularized dependencies to version 3.2.35
 - Updated JavaFX to version 17.0.11
 - Updated Gradle wrapper to version 8.8
