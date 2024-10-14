@@ -2,12 +2,8 @@ System.setProperty("file.encoding", "UTF-8")
 
 buildscript {
     repositories {
-        jcenter()
         gradlePluginPortal()
-        maven {
-            url "${System.properties['user.home']}/.m2/repository/"
-        }
-
+        mavenCentral()
         maven {
             url "https://sandec.jfrog.io/artifactory/repo"
         }
@@ -22,10 +18,7 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
-        jcenter()
-        mavenLocal()
-
+        mavenCentral()
         maven {
             url "https://sandec.jfrog.io/artifactory/repo"
         }
