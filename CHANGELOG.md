@@ -1,3 +1,5 @@
+## 0.8.4 (TBD)
+
 ## 0.8.3 (October 14, 2024)
 - Updated JPro dependencies to version `2024.3.3`
 - Updated SimpleFX modularized dependencies to version `3.2.37`
